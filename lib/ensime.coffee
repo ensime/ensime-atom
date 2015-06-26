@@ -79,19 +79,17 @@ module.exports = Ensime =
     }
   }
 
-
-  activate: (state) ->
-    @subscriptions = new CompositeDisposable
-    @editorControllers = new WeakMap
-    @showTypesControllers = new WeakMap
-
+  deactivatedSubscriptions: ->
     # Need to have a started server and port file
     @subscriptions.add atom.commands.add 'atom-workspace', "ensime:update-ensime-server", => updateEnsimeServer()
     @subscriptions.add atom.commands.add 'atom-workspace', "ensime:start", =>
       if !projectPath()?
         modalMsg("no valid Ensime project found (did you remember to generate a .ensime file?)")
-      else @initProject()
+      else
+        @initProject()
 
+
+  activatedSubscriptions: ->
     @subscriptions.add atom.commands.add 'atom-workspace', "ensime:stop", => @stopEnsime()
 
     @subscriptions.add atom.commands.add 'atom-workspace', "ensime:typecheck-all", => @typecheckAll()
@@ -101,6 +99,12 @@ module.exports = Ensime =
 
     @subscriptions.add atom.commands.add 'atom-workspace', "ensime:go-to-definition", => @goToDefinitionOfCursor()
 
+
+  activate: (state) ->
+    @subscriptions = new CompositeDisposable
+    @editorControllers = new WeakMap
+    @showTypesControllers = new WeakMap
+    @deactivatedSubscriptions()
     # https://discuss.atom.io/t/ok-to-use-grammar-cson-for-just-file-assoc/17801/11
     Promise.resolve(
       atom.packages.isPackageLoaded('language-scala') && atom.packages.activatePackage('language-scala')
@@ -163,7 +167,7 @@ module.exports = Ensime =
     @typechecking = new TypeCheckingFeature()
 
     initClient = =>
-
+      @activatedSubscriptions()
       @client = createClient(portFile(), (msg) => @generalHandler(msg) )
 
 
@@ -228,6 +232,9 @@ module.exports = Ensime =
 
     @typechecking?.destroy()
     @typechecking = null
+    
+    @subscriptions = new CompositeDisposable
+    @deactivatedSubscriptions()
 
 
 
