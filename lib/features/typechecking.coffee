@@ -20,7 +20,7 @@ class TypeChecking
     @markersOfFile = new Map
 
     @disposables.add atom.workspace.observeTextEditors (editor) =>
-      if isScalaSource(editor)
+      if isScalaSource(editor) # TODO: check that the source is also in an ensime-activated project.  ensime:start should log which directories are ensime-enabled
         @editors.set(editor.getPath(), editor)
         @disposables.add editor.onDidDestroy () =>
           @editors.delete(editor.getPath())
