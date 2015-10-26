@@ -9,7 +9,6 @@ StatusbarView = require './views/statusbar-view'
 {updateEnsimeServer, startEnsimeServer, classpathFileName} = require './ensime-startup'
 
 ShowTypes = require './features/show-types'
-GoToType = require './features/go-to-type'
 Implicits = require('./features/implicits')
 AutoTypecheck = require('./features/auto-typecheck')
 
@@ -119,11 +118,15 @@ module.exports = Ensime =
 
 
   activate: (state) ->
+    # Install deps if not there
+    apd = require('atom-package-dependencies')
+    apd.install()
+
+
     @subscriptions = new CompositeDisposable
 
     # Feature controllers
     @showTypesControllers = new WeakMap
-    @goToTypeControllers = new WeakMap
     @implicitControllers = new WeakMap
     @autotypecheckControllers = new WeakMap
 
@@ -211,7 +214,6 @@ module.exports = Ensime =
         if isScalaSource(editor)
           if atom.config.get('Ensime.enableTypeTooltip')
             if not @showTypesControllers.get(editor) then @showTypesControllers.set(editor, new ShowTypes(editor, @client))
-          if not @goToTypeControllers.get(editor) then @goToTypeControllers.set(editor, new GoToType(editor, @client))
           if not @implicitControllers.get(editor) then @implicitControllers.set(editor, new Implicits(editor, @client))
           if not @autotypecheckControllers.get(editor) then @autotypecheckControllers.set(editor, new AutoTypecheck(editor, @client))
 
@@ -250,7 +252,6 @@ module.exports = Ensime =
       controller.delete(editor)
 
     deactivateAndDelete(@showTypesControllers)
-    deactivateAndDelete(@goToTypeControllers)
     deactivateAndDelete(@implicitControllers)
     deactivateAndDelete(@autotypecheckControllers)
 
@@ -342,6 +343,16 @@ module.exports = Ensime =
         else
           []
     }
+
+  provideHyperclick: ->
+    {
+      getSuggestionForWord: (textEditor, text, range) =>
+        {
+          range: range
+          callback: () => @client?.goToTypeAtPoint(textEditor.getBuffer(), range.start)
+        }
+    }
+
 
   formatCurrentSourceFile: ->
     editor = atom.workspace.getActiveTextEditor()
