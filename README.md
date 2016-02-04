@@ -15,7 +15,7 @@ ENSIME integration includes the following features for Scala developers:
 
 ## Full Documentation
 
-Documentation is available at [ensime.org](http://ensime.org/editord/atom/)
+Documentation is available at [ensime.org](http://ensime.org/editors/atom/)
 
 
 ## Getting Started Summary
