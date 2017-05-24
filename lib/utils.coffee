@@ -16,6 +16,15 @@ isScalaSource = (editor) ->
   else
     false
 
+
+isJavaSource = (editor) ->
+  buffer = editor.getBuffer()
+  fname = buffer.getUri()
+  if(fname)
+    path.extname(fname) in ['.java']
+  else
+    false
+
 # pixel position from mouse event
 pixelPositionFromMouseEvent = (editor, event) ->
   {clientX, clientY} = event
@@ -92,6 +101,7 @@ proxySettings = ->
 
 module.exports = {
   isScalaSource,
+  isJavaSource,
   pixelPositionFromMouseEvent,
   screenPositionFromMouseEvent,
   bufferPositionFromMouseEvent,

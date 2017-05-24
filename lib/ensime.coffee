@@ -95,7 +95,7 @@ module.exports = Ensime =
     @someInstanceStarted = false
 
     @controlSubscription = atom.workspace.observeTextEditors (editor) =>
-      if utils().isScalaSource(editor)
+      if utils().isScalaSource(editor) || utils().isJavaSource(editor)
         instanceLookup = => @instanceManager?.instanceOfFile(editor.getPath())
         clientLookup = -> instanceLookup()?.api
         if not @showTypesControllers.get(editor) then @showTypesControllers.set(editor, new ShowTypes(editor, clientLookup))
@@ -168,10 +168,10 @@ module.exports = Ensime =
     else if(typehint == 'CompilerRestartedEvent')
       statusbarView.setText('Compiler restarted!')
 
-    else if(typehint == 'ClearAllScalaNotesEvent')
+    else if(typehint == 'ClearAllScalaNotesEvent' || typehint == 'ClearAllJavaNotesEvent')
       typechecking?.clearScalaNotes()
 
-    else if(typehint == 'NewScalaNotesEvent')
+    else if(typehint == 'NewScalaNotesEvent' || typehint == 'NewJavaNotesEvent')
       typechecking?.addScalaNotes(msg)
 
     else if(typehint.startsWith('SendBackgroundMessageEvent'))
