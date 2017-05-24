@@ -344,7 +344,7 @@ module.exports = Ensime =
       @autocompletePlusProvider
 
     {
-      selector: '.source.scala'
+      selector: '.source.scala, .source.java'
       disableForSelector: '.source.scala .comment'
       inclusionPriority: 10
       excludeLowerPriority: true
