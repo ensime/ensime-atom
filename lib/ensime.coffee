@@ -368,7 +368,7 @@ module.exports = Ensime =
     {
       providerName: 'ensime-atom'
       getSuggestionForWord: (textEditor, text, range) =>
-        if utils().isScalaSource(textEditor)
+        if utils().isScalaSource(textEditor) || utils().isJavaSource(textEditor)
           api = @apiOfEditor(textEditor)
           {
             range: range
