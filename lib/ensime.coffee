@@ -28,6 +28,7 @@ log = undefined
 
 
 scalaSourceSelector = """atom-text-editor[data-grammar="source scala"]"""
+javaSourceSelector = """atom-text-editor[data-grammar="source java"]"""
 module.exports = Ensime =
 
   config: require './config'
@@ -51,6 +52,10 @@ module.exports = Ensime =
     @startedCommands.add atom.commands.add 'atom-workspace', "ensime:unload-all", => @unloadAll()
     @startedCommands.add atom.commands.add scalaSourceSelector, "ensime:typecheck-file", => @typecheckFile()
     @startedCommands.add atom.commands.add scalaSourceSelector, "ensime:typecheck-buffer", => @typecheckBuffer()
+
+    @startedCommands.add atom.commands.add javaSourceSelector, "ensime:typecheck-file", => @typecheckFile()
+    @startedCommands.add atom.commands.add javaSourceSelector, "ensime:typecheck-buffer", => @typecheckBuffer()
+
 
     @startedCommands.add atom.commands.add scalaSourceSelector, "ensime:go-to-definition", => @goToDefinitionOfCursor()
 
