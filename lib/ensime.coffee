@@ -101,7 +101,7 @@ module.exports = Ensime =
     @someInstanceStarted = false
 
     @controlSubscription = atom.workspace.observeTextEditors (editor) =>
-      if utils().isScalaSource(editor) || utils().isJavaSource(editor)
+      if utils().isScalaSource(editor) or utils().isJavaSource(editor)
         instanceLookup = => @instanceManager?.instanceOfFile(editor.getPath())
         clientLookup = -> instanceLookup()?.api
         if not @showTypesControllers.get(editor) then @showTypesControllers.set(editor, new ShowTypes(editor, clientLookup))
@@ -116,11 +116,12 @@ module.exports = Ensime =
     @refactorings = new Refactorings
 
     atom.workspace.onDidStopChangingActivePaneItem (pane) =>
-      if(atom.workspace.isTextEditor(pane) and utils().isScalaSource(pane))
-        log.trace('this: ' + this)
-        log.trace(['@instanceManager: ', @instanceManager])
-        instance = @instanceManager?.instanceOfFile(pane.getPath())
-        @switchToInstance(instance)
+      if atom.workspace.isTextEditor(pane)
+        if utils().isScalaSource(pane) or utils().isJavaSource(pane)
+          log.trace('this: ' + this)
+          log.trace(['@instanceManager: ', @instanceManager])
+          instance = @instanceManager?.instanceOfFile(pane.getPath())
+          @switchToInstance(instance)
 
   switchToInstance: (instance) ->
     log.trace(['changed from ', @activeInstance, ' to ', instance])
@@ -369,7 +370,7 @@ module.exports = Ensime =
     {
       providerName: 'ensime-atom'
       getSuggestionForWord: (textEditor, text, range) =>
-        if utils().isScalaSource(textEditor) || utils().isJavaSource(textEditor)
+        if utils().isScalaSource(textEditor) or utils().isJavaSource(textEditor)
           api = @apiOfEditor(textEditor)
           {
             range: range
