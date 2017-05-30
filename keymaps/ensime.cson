@@ -1,5 +1,5 @@
 'atom-text-editor':
-  'shift-cmd-t': 'ensime:search-public-symbol'
+  'f6': 'ensime:search-public-symbol'
   'ctrl-alt-D': 'ensime:browse-doc'
 
 'atom-text-editor[data-grammar="source scala"]':
