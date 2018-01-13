@@ -1,7 +1,7 @@
 {
   "name": "Ensime",
   "main": "./lib/ensime",
-  "version": "0.41.0",
+  "version": "0.42.0",
   "description": "Scala support via Ensime integration",
   "repository": "https://github.com/ensime/ensime-atom",
   "license": "MIT",
