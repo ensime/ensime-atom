@@ -1,5 +1,5 @@
 module.exports =
-  assemblyJar: 
+  assemblyJar:
     description: 'Use the following assembly jar instead of normal bootstrap'
     type: 'string'
     default: ''
@@ -9,6 +9,11 @@ module.exports =
     type: 'string'
     default: ''
     order: 20
+  ensimeServerVersion:
+    description: 'Version of Ensime server'
+    type: 'string'
+    default: "2.0.0"
+    order: 10
   ensimeServerFlags:
     description: 'Extra java flags for ensime server startup'
     type: 'string'
